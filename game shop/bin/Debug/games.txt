@@ -1,0 +1,21 @@
+﻿Oblutkove Avanture;1000;oblutkoveavanture.png;Adventures of an ordinary pebble in search of PebbleTown. Experience an incredible story, stunning landscapes, and an unforgettable journey, moreover the best experience ever!;Adventure
+GTA V;30;gta.png;Open-world criminal adventure that allows you to explore the city, engage in missions, and experience the life of the criminal underworld in a whole new way;Action
+Red Dead Redemption 2;40;rdr2.jpg;Cowboy open-world story that combines epic narrative, realistic landscapes, and vibrant characters in an unforgettable adventure;Adventure
+Minecraft;20;minecraft.jpg;Blocky sandbox world where you can build, explore, and survive, with endless creative possibilities and community mods;Sandbox
+FIFA 24;50;fifa.jpg;Football simulation with realistic teams, tactics, and match dynamics that will immerse you in every game;Sports
+Call of Duty MW3;60;codmw3.png;Modern war FPS with intense missions, team play, and thrilling online battles;Shooter
+The Witcher 3;25;witcher3.jpg;Fantasy RPG following Geralt, with rich quests, moral choices, and beautiful open-world landscapes;RPG
+Cyberpunk 2077;35;cyberpunk.jpg;Futuristic open world where you explore Night City, choose your path, and dive into a cyberpunk adventure full of action and intrigue;RPG
+Forza Horizon 5;45;forza5.jpg;Open-world racing through stunning landscapes, with impressive cars and dynamic events;Racing
+Elden Ring;55;eldenring.jpg;Challenging fantasy RPG with a vast world, tough boss fights, and freedom of exploration that tests your strategy and skill;RPG
+Assassin's Creed Valhalla;30;valhalla.jpg;Viking adventure with epic battles, exploration of England, and building your own Viking community;Action
+Hogwarts Legacy;40;hogwarts.png;Magical open world where you can learn magic, explore Hogwarts, and shape your wizarding destiny;RPG
+Need for Speed Heat;20;nfsheat.png;Street racing with adrenaline-fueled races, car modifications, and night-time challenges;Racing
+Terraria;10;terraria.jpg;2D sandbox adventure with endless exploration, monster battles, and building fantastic worlds;Sandbox
+Battlefield 2042;30;battlefield.jpg;Massive online battles with modern military equipment, team strategy, and dynamic environments;Shooter
+God of War;35;gow.jpg;Mythological action following Kratos through epic battles, an emotional story, and a rich Norse world;Action
+The Last of Us 1;45;tlou.jpg;Emotional post-apocalyptic adventure exploring human psychology, survival, and deep narrative through its characters;Adventure
+DOOM Eternal;25;doom.png;Fast and brutal demon-slaying FPS with intense action, explosive weapons, and incredible level design;Shooter
+Portal 2;15;portal2.jpg;Brilliant puzzle game with portals, humor, and innovative gameplay mechanics that challenge your logic;Puzzle
+Dark Souls III;30;ds3.jpg;Dark and challenging action RPG with tough battles, mysterious world, and a sense of accomplishment after every victory;RPG
+Sekiro;35;sekiro.jpg;Fast and brutal samurai action focused on parry combat, stealth elements, and a challenging adventure;Action
