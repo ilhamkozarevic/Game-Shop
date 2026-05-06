@@ -5,17 +5,24 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
+using System.Data.OleDb;
 
 namespace game_shop
 {
     public partial class LibraryForm : Form
     {
+        private string connString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=GameShop.accdb;";
+        private OleDbConnection connection;
+
         public LibraryForm()
         {
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+
+            connection = new OleDbConnection(connString);
 
             InitializeComponent();
             LoadLibrary();
@@ -72,7 +79,51 @@ namespace game_shop
         {
             flowLibrary.Controls.Clear();
 
-            if (MainForm.cartPurchased.Count == 0)
+            List<Game> purchasedGames = new List<Game>();
+
+            try
+            {
+                connection.Open();
+                
+                OleDbCommand cmd = connection.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = (@"SELECT Igre.IgraID, Igre.Naziv, Igre.Cijena, Igre.Slika 
+                         FROM Igre 
+                         INNER JOIN Biblioteka ON Igre.IgraID = Biblioteka.IgraID 
+                         WHERE Biblioteka.KorisnikID = @KorisnikID");
+
+                cmd.Parameters.AddWithValue("@KorisnikID", UserSession.CurrentUserId);
+
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Game g = new Game
+                    {
+                        Id = Convert.ToInt32(reader["IgraID"]),
+                        Name = reader["Naziv"].ToString(),
+                        Price = Convert.ToDouble(reader["Cijena"]),
+                        ImagePath = "Images\\" + reader["Slika"].ToString()
+                    };
+                    purchasedGames.Add(g);
+                }
+
+                reader.Close();
+                cmd.Dispose();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Greška pri učitavanju biblioteke: " + ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
+            if (purchasedGames.Count == 0)
             {
                 Label lblEmpty = new Label();
                 lblEmpty.Text = "Your library is empty...";
@@ -80,23 +131,16 @@ namespace game_shop
                 lblEmpty.Left = 207;
                 lblEmpty.Top = 45;
                 lblEmpty.Font = new Font("Arial", 14, FontStyle.Italic);
-                if (MainForm.DarkMode)
-                    lblEmpty.ForeColor = Color.White;
-                else
-                    lblEmpty.ForeColor = Color.Black;
+                lblEmpty.ForeColor = MainForm.DarkMode ? Color.White : Color.Black;
                 lblEmpty.TextAlign = ContentAlignment.MiddleCenter;
                 lblEmpty.Margin = new Padding(77, 435, 20, 20);
 
-                if (MainForm.DarkMode)
-                    flowLibrary.BackColor = Color.FromArgb(40, 40, 40);
-                else
-                    flowLibrary.BackColor = Color.WhiteSmoke;
-
+                flowLibrary.BackColor = MainForm.DarkMode ? Color.FromArgb(40, 40, 40) : Color.WhiteSmoke;
                 flowLibrary.Controls.Add(lblEmpty);
             }
             else
             {
-                foreach (Game g in MainForm.cartPurchased)
+                foreach (Game g in purchasedGames)
                 {
                     Panel panel = new Panel();
                     panel.Width = 150;
@@ -120,15 +164,7 @@ namespace game_shop
                     lblName.Left = 10;
                     lblName.Width = 130;
                     lblName.TextAlign = ContentAlignment.MiddleCenter;
-
-                    if (MainForm.DarkMode)
-                    {
-                        lblName.ForeColor = Color.White;
-                    }
-                    else
-                    {
-                        lblName.ForeColor = Color.Black;
-                    }
+                    lblName.ForeColor = MainForm.DarkMode ? Color.White : Color.Black;
 
                     panel.Controls.Add(pic);
                     panel.Controls.Add(lblName);

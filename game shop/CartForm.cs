@@ -6,16 +6,22 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Data.OleDb;
 
 namespace game_shop
 {
     public partial class CartForm : Form
     {
+        private string connString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=GameShop.accdb;";
+        private OleDbConnection connection;
+
         public CartForm()
         {
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+
+            connection = new OleDbConnection(connString);
 
             InitializeComponent();
 
@@ -135,17 +141,92 @@ namespace game_shop
                 return;
             }
 
-            foreach (var game in MainForm.cart)
+            try
             {
-                if (!MainForm.cartPurchased.Contains(game))
-                    MainForm.cartPurchased.Add(game);
+                if (connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+                bool nestoKupljeno = false;
+                bool nekaIgraPreskocena = false;
+
+                int userId = Convert.ToInt32(UserSession.CurrentUserId);
+
+                foreach (var game in MainForm.cart)
+                {
+                    if (game == null) continue;
+
+                    OleDbCommand checkCmd = new OleDbCommand(
+                        "SELECT COUNT(*) FROM Biblioteka WHERE KorisnikID = @KorisnikID AND IgraID = @IgraID",
+                        connection);
+
+                    checkCmd.Parameters.Add(new OleDbParameter("@KorisnikID", OleDbType.Integer) { Value = userId });
+                    checkCmd.Parameters.Add(new OleDbParameter("@IgraID", OleDbType.Integer) { Value = game.Id });
+
+                    int count = (int)checkCmd.ExecuteScalar();
+                    checkCmd.Dispose();
+
+                    if (count > 0 || MainForm.cartPurchased.Any(g => g.Id == game.Id))
+                    {
+                        MessageBox.Show("You already own the game: \"" + game.Name + "\"!", "Already Purchased", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        if (!MainForm.cartPurchased.Any(g => g.Id == game.Id))
+                        {
+                            MainForm.cartPurchased.Add(game);
+                        }
+
+                        nekaIgraPreskocena = true;
+                        continue;
+                    }
+
+                    OleDbCommand insertCmd = new OleDbCommand(
+                        "INSERT INTO Biblioteka (KorisnikID, IgraID, DatumKupovine) VALUES (@KorisnikID, @IgraID, @DatumKupovine)",
+                        connection);
+
+                    insertCmd.Parameters.Add(new OleDbParameter("@KorisnikID", OleDbType.Integer) { Value = userId });
+                    insertCmd.Parameters.Add(new OleDbParameter("@IgraID", OleDbType.Integer) { Value = game.Id });
+                    insertCmd.Parameters.Add(new OleDbParameter("@DatumKupovine", OleDbType.Date) { Value = DateTime.Now });
+
+                    insertCmd.ExecuteNonQuery();
+                    insertCmd.Dispose();
+
+                    if (!MainForm.cartPurchased.Contains(game))
+                    {
+                        MainForm.cartPurchased.Add(game);
+                    }
+
+                    nestoKupljeno = true;
+                }
+
+                if (nestoKupljeno)
+                {
+                    MessageBox.Show("Thank you for your purchase! The games have been added to your library.", "Purchase complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    MainForm.cart.Clear();
+                    RefreshCart();
+                    ((MainForm)this.Owner).UpdateCartStatus();
+                }
+                else if (nekaIgraPreskocena && MainForm.cart.Count > 0)
+                {
+                    MainForm.cart.Clear();
+                    RefreshCart();
+                    ((MainForm)this.Owner).UpdateCartStatus();
+
+                    MessageBox.Show("No new games were purchased because you already own all items in the cart.", "Checkout", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
-
-            MessageBox.Show("Thank you for your purchase!", "Purchase complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            MainForm.cart.Clear();
-            RefreshCart();
-            ((MainForm)this.Owner).UpdateCartStatus();
+            catch (Exception ex)
+            {
+                MessageBox.Show("Greška pri kupovini: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
         }
 
     }

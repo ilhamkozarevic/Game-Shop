@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Data.OleDb;
 
 namespace game_shop
 {
@@ -25,9 +26,14 @@ namespace game_shop
 
         public static List<Game> cartPurchased = new List<Game>();
 
+        private string connString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=GameShop.accdb;";
+        private OleDbConnection connection;
+
         public MainForm()
         {
             InitializeComponent();
+
+            connection = new OleDbConnection(connString);
 
             pbFeatured.Cursor = Cursors.Hand;
 
@@ -131,20 +137,45 @@ namespace game_shop
 
         private void LoadGamesFromFile()
         {
-            string[] lines = File.ReadAllLines("games.txt");
+            games.Clear();
 
-            foreach (string line in lines)
+            try
             {
-                string[] parts = line.Split(';');
+                connection.Open();
 
-                Game g = new Game();
-                g.Name = parts[0];
-                g.Price = double.Parse(parts[1]);
-                g.ImagePath = "Images/" + parts[2];
-                g.Description = parts[3];
-                g.Genre = parts[4];
+                OleDbCommand cmd = connection.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * FROM Igre";
 
-                games.Add(g);
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Game g = new Game();
+
+                    g.Id = Convert.ToInt32(reader["IgraID"]);
+                    g.Name = reader["Naziv"].ToString();
+                    g.Price = Convert.ToDouble(reader["Cijena"]);
+                    g.Description = reader["Opis"].ToString();
+                    g.Genre = reader["Zanr"].ToString();
+
+                    g.ImagePath = "Images\\" + reader["Slika"].ToString();
+
+                    games.Add(g);
+                }
+
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Greška pri učitavanju igara: " + ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
 
@@ -358,6 +389,11 @@ namespace game_shop
             LibraryForm library = new LibraryForm();
             library.Owner = this;
             library.ShowDialog();
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
 
     }

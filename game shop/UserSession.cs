@@ -7,12 +7,10 @@ namespace game_shop
 {
     public static class UserSession
     {
-        public static string CurrentUsername = null;
+        public static string CurrentUsername { get; set; }
+        public static int CurrentUserId { get; set; }
 
-        public static bool IsLoggedIn
-        {
-            get { return !string.IsNullOrEmpty(CurrentUsername); }
-        }
+        public static string Role { get; set; }
     }
 
 }

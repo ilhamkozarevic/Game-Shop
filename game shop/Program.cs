@@ -16,12 +16,7 @@ namespace game_shop
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            LoginForm login = new LoginForm();
-
-            if (login.ShowDialog() == DialogResult.OK)
-            {
-                Application.Run(new MainForm());
-            }
+            Application.Run(new LoginForm());
 
         }
     }

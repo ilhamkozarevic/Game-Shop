@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Data.OleDb;
 
 namespace game_shop
 {
@@ -14,6 +15,9 @@ namespace game_shop
     {
 
         private bool passwordVisible = false;
+        private string connString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=GameShop.accdb;";
+
+        private OleDbConnection connection;
 
         public LoginForm()
         {
@@ -21,6 +25,8 @@ namespace game_shop
             this.StartPosition = FormStartPosition.CenterScreen;
 
             InitializeComponent();
+
+            connection = new OleDbConnection(connString);
 
             txtPassword.UseSystemPasswordChar = true;
 
@@ -51,29 +57,66 @@ namespace game_shop
             string user = txtUsername.Text.Trim();
             string pass = txtPassword.Text.Trim();
 
-            if (!File.Exists("users.txt"))
+            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
             {
-                lblMessage.Text = "No users registered yet.";
+                lblMessage.Text = "Enter username and password.";
                 return;
             }
 
-            var lines = File.ReadAllLines("users.txt");
-
-            bool found = lines.Any(l =>
+            try
             {
-                var parts = l.Split(';');
-                return parts.Length == 2 && parts[0] == user && parts[1] == pass;
-            });
+                connection.Open();
 
-            if (found)
-            {
-                UserSession.CurrentUsername = user;
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                OleDbCommand cmd = connection.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+
+                cmd.CommandText = "SELECT * FROM Korisnici WHERE KorisnickoIme = @KorisnickoIme AND Sifra = @Sifra";
+
+                cmd.Parameters.AddWithValue("@KorisnickoIme", user);
+                cmd.Parameters.AddWithValue("@Sifra", pass);
+
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    UserSession.CurrentUsername = reader["KorisnickoIme"].ToString();
+                    UserSession.CurrentUserId = Convert.ToInt32(reader["KorisnikID"]);
+
+                    string uloga = reader["Uloga"] != DBNull.Value ? reader["Uloga"].ToString() : "Korisnik";
+                    UserSession.Role = uloga;
+
+                    reader.Close();
+
+                    if (UserSession.Role == "Admin")
+                    {
+                        AdminForm adminForm = new AdminForm();
+                        adminForm.Show();
+                    }
+                    else
+                    {
+                        MainForm mainForm = new MainForm();
+                        mainForm.Show();
+                    }
+
+                    this.Hide();
+                }
+                else
+                {
+                    lblMessage.Text = "Wrong username or password.";
+                }
+
+                reader.Close();
             }
-            else
+            catch (Exception ex)
             {
-                lblMessage.Text = "Wrong username or password.";
+                MessageBox.Show("Greska pri konekciji: " + ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
 
@@ -88,21 +131,43 @@ namespace game_shop
                 return;
             }
 
-            if (File.Exists("users.txt"))
+            try
             {
-                var exists = File.ReadAllLines("users.txt")
-                    .Any(l => l.Split(';')[0] == user);
+                connection.Open();
 
-                if (exists)
+                OleDbCommand checkCmd = connection.CreateCommand();
+                checkCmd.CommandText = ("SELECT * FROM Korisnici WHERE KorisnickoIme = @KorisnickoIme");
+                checkCmd.Parameters.AddWithValue("@KorisnickoIme", user);
+
+                OleDbDataReader reader = checkCmd.ExecuteReader();
+
+                if (reader.Read())
                 {
                     lblMessage.Text = "Username already exists.";
+                    reader.Close();
                     return;
                 }
+                reader.Close();
+
+                OleDbCommand insertCmd = connection.CreateCommand();
+                insertCmd.CommandText = ("INSERT INTO Korisnici (KorisnickoIme, Sifra) VALUES (@KorisnickoIme, @Sifra)");
+                insertCmd.Parameters.AddWithValue("@KorisnickoIme", user);
+                insertCmd.Parameters.AddWithValue("@Sifra", pass);
+
+                insertCmd.ExecuteNonQuery();
+                lblMessage.Text = "Account created! You can login now.";
             }
-
-            File.AppendAllText("users.txt", user + ";" + pass + Environment.NewLine);
-
-            lblMessage.Text = "Account created! You can login now.";
+            catch (Exception ex)
+            {
+                MessageBox.Show("Greška: " + ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
         }
     }
 }

@@ -53,3 +53,44 @@ D:\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game s
 D:\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game_shop.ReviewsForm.resources
 D:\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game_shop.WishlistForm.resources
 D:\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game shop.csproj.GenerateResource.Cache
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\Interop.WMPLib.dll
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\AxInterop.WMPLib.dll
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game shop.csproj.ResolveComReference.cache
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game shop.exe
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game shop.pdb
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\bin\Debug\games.txt
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\bin\Debug\reviews.txt
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\bin\Debug\game shop.exe
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\bin\Debug\game shop.pdb
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\bin\Debug\Interop.WMPLib.dll
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\bin\Debug\AxInterop.WMPLib.dll
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game_shop.CartForm.resources
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game_shop.LibraryForm.resources
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game_shop.LoginForm.resources
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game_shop.MainForm.resources
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game_shop.GameDetailsForm.resources
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game_shop.Properties.Resources.resources
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game_shop.ReviewsForm.resources
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game_shop.WishlistForm.resources
+C:\Users\Korisnik\Desktop\oblutak-usb-backup\srednja skola\cetvrti razred\programiranje\modul 2\projektni\game shop\game shop\game shop\obj\Debug\game shop.csproj.GenerateResource.Cache
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\Interop.WMPLib.dll
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\AxInterop.WMPLib.dll
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game shop.csproj.ResolveComReference.cache
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game shop.exe
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game shop.pdb
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\bin\Debug\game shop.exe
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\bin\Debug\game shop.pdb
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\bin\Debug\Interop.WMPLib.dll
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\bin\Debug\AxInterop.WMPLib.dll
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game_shop.CartForm.resources
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game_shop.LibraryForm.resources
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game_shop.LoginForm.resources
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game_shop.MainForm.resources
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game_shop.GameDetailsForm.resources
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game_shop.Properties.Resources.resources
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game_shop.ReviewsForm.resources
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game_shop.WishlistForm.resources
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game shop.csproj.GenerateResource.Cache
+C:\Users\Korisnik\Desktop\projektni\game shop\game shop\game shop\obj\Debug\game_shop.AdminForm.resources

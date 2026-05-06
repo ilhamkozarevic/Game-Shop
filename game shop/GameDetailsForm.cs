@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Data.OleDb;
 
 namespace game_shop
 {
@@ -22,11 +23,15 @@ namespace game_shop
 
         PictureBox[] stars = new PictureBox[5];
 
+        OleDbConnection connection;
+
         public GameDetailsForm(Game game)
         {
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+
+            connection = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=GameShop.accdb;");
 
             InitializeComponent();
 
@@ -127,40 +132,43 @@ namespace game_shop
 
         private void LoadAverageRating()
         {
-            string path = Path.Combine(Application.StartupPath, "reviews.txt");
-
-            if (!File.Exists(path))
+            try
             {
-                lblRating2.Text = "☆☆☆☆☆ (0.0)";
-                return;
-            }
+                if (connection.State == ConnectionState.Closed) connection.Open();
 
-            var lines = File.ReadAllLines(path);
+                OleDbCommand cmd = connection.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = ("SELECT AVG(Ocjena) AS Prosjek, COUNT(Ocjena) AS Broj FROM Recenzije WHERE IgraID = @IgraID");
 
-            var ratings = lines
-                .Where(l => l.StartsWith(selectedGame.Name + "|"))
-                .Select(l => l.Split('|'))
-                .Where(parts => parts.Length >= 2)
-                .Select(parts =>
+                cmd.Parameters.AddWithValue("@IgraID", selectedGame.Id);
+
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
                 {
-                    int r;
-                    return int.TryParse(parts[1], out r) ? r : 0;
-                })
-                .Where(r => r > 0)
-                .ToList();
+                    if (reader["Prosjek"] != DBNull.Value)
+                    {
+                        double avg = Convert.ToDouble(reader["Prosjek"]);
+                        int fullStars = (int)Math.Round(avg);
+                        string stars = new string('★', fullStars).PadRight(5, '☆');
 
-            if (ratings.Count == 0)
+                        lblRating2.Text = stars + " (" + avg.ToString("0.0") + ")";
+                    }
+                    else
+                    {
+                        lblRating2.Text = "☆☆☆☆☆ (0.0)";
+                    }
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
             {
                 lblRating2.Text = "☆☆☆☆☆ (0.0)";
-                return;
             }
-
-            double avg = ratings.Average();
-
-            int fullStars = (int)Math.Round(avg);
-            string stars = new string('★', fullStars).PadRight(5, '☆');
-
-            lblRating2.Text = stars + " (" + avg.ToString("0.0") + ")";
+            finally
+            {
+                if (connection.State == ConnectionState.Open) connection.Close();
+            }
         }
 
         private string GetStars(double rating)
@@ -210,29 +218,52 @@ namespace game_shop
             int rating = GetRating();
             string review = rtbReview.Text.Trim();
 
+            int korisnikId = UserSession.CurrentUserId;
+
             if (rating == 0 || string.IsNullOrEmpty(review))
             {
                 MessageBox.Show("Please select a rating and write a review!", "Review Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string line = selectedGame.Name + "|" + rating + "|" + review;
-            System.IO.File.AppendAllText("reviews.txt", line + Environment.NewLine);
-
-            rtbReview.Clear();
-
-            selectedRating = 0;
-            foreach (PictureBox star in starBoxes)
+            try
             {
-                star.ImageLocation = "Images/star_empty.png";
-            }
+                if (connection.State == ConnectionState.Closed) connection.Open();
 
-            MessageBox.Show("Review has been added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                OleDbCommand cmd = connection.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = ("INSERT INTO Recenzije (KorisnikID, IgraID, Ocjena, Komentar) VALUES (@KorisnikID, @IgraID, @Ocjena, @Komentar)");
+
+                cmd.Parameters.AddWithValue("@KorisnikID", korisnikId);
+                cmd.Parameters.AddWithValue("@IgraID", selectedGame.Id);
+                cmd.Parameters.AddWithValue("@Ocjena", rating);
+                cmd.Parameters.AddWithValue("@Komentar", review);
+
+                cmd.ExecuteNonQuery();
+
+                rtbReview.Clear();
+                selectedRating = 0;
+                foreach (PictureBox star in starBoxes)
+                {
+                    star.ImageLocation = "Images/star_empty.png";
+                }
+
+                MessageBox.Show("Review has been added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadAverageRating();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Greška pri slanju recenzije: " + ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open) connection.Close();
+            }
         }
 
         private void btnShowReviews_Click(object sender, EventArgs e)
         {
-            ReviewsForm reviewsForm = new ReviewsForm(selectedGame.Name);
+            ReviewsForm reviewsForm = new ReviewsForm(selectedGame.Id);
             reviewsForm.ShowDialog();
         }
 
